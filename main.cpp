@@ -1,4 +1,5 @@
 #include <QCoreApplication>
+#include <Tree.h>
 
 int main(int argc, char *argv[])
 {
