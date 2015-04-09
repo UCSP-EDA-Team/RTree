@@ -35,25 +35,24 @@ public:
         this->nDimensions = nDimensions;
     }
 
-    bool insert(Container data)
+    bool insert(Hyperrectangle BoundingBox, Container data)
     {
       Node ** s;
-      this->chooseLeaf(data, s);
+      this->chooseLeaf(BoundingBox, data, s);
 
-      if((*s)->entries.size() < CHILDS)add(data, s);
+      if((*s)->entries.size() < CHILDS)add(BoundingBox, data, s);
 
       //*s = new Node(data);
 
       return true;
     }
 
-    bool add(Hyperrectangle data, Node** &s)
+    bool add(Hyperrectangle BoundingBox, Container data, Node** &s)
     {
-        Hyperrectangle obj(data.getVertices());
-        (*s)->entries.push_back(make_pair(obj,(void *)&data));
+        (*s)->entries.push_back(make_pair(BoundingBox,(void *)&data));
     }
 
-    bool chooseLeaf(Container data, Node** &s)
+    bool chooseLeaf(Hyperrectangle BoundingBox, Container data, Node** &s)
     {
         s = &this->head;
         double min;
@@ -62,7 +61,7 @@ public:
             min = INF;
             use = 0;
             for(int i=0;i<(*s)->entries.size();i++)
-                if((*s)->entries[i].first.contain(data) < min)
+                if((*s)->entries[i].first.contain(BoundingBox) < min)
                     use = i;
             s = (Node **)(&(*s)->entries[use].second);;
         }
