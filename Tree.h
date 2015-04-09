@@ -26,11 +26,13 @@ private:
     };
     
     Node * head;
+    size_t nDimensions;
 
 public:
-    Tree()
+    Tree(size_t nDimensions)
     {
         this->head = new Node(nullptr,0);
+        this->nDimensions = nDimensions;
     }
 
     bool insert(Container data)
