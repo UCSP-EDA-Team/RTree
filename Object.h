@@ -6,18 +6,8 @@
 class Object
 {
 protected:
-    points vertices;
+
 public:
-    Object(points vertices)
-    {
-        this->vertices = vertices;
-    }
-
-    points getVertices()
-    {
-        return this->vertices;
-    }
-
     virtual double area();
     virtual double contain(Object);
 };
