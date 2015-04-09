@@ -21,5 +21,4 @@ SOURCES += main.cpp
 HEADERS += \
     Tree.h \
     config.h \
-    Rectangle.h \
-    Object.h
+    Hyperrectangle.h

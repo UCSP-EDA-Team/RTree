@@ -2,8 +2,9 @@
 #define TREE_H
 
 #include "config.h"
-#include "Rectangle.h"
+#include "Hyperrectangle.h"
 
+template<typename Container>
 class Tree
 {
 private:
@@ -14,8 +15,8 @@ private:
         Node * parent;
         size_t level;
 
-        vector<Object> objects;
-        vector<Node *> childs;
+        typedef pair<Hyperrectangle, void *> entry;
+        vector<entry> entries;
     public:
         Node(Node *parent, size_t level)
         {
@@ -32,24 +33,25 @@ public:
         this->head = new Node(nullptr,0);
     }
 
-    bool insert(Object data)
+    bool insert(Container data)
     {
       Node ** s;
       this->chooseLeaf(data, s);
 
-      if((*s)->objects.size() < CHILDS)add(data, s);
+      if((*s)->entries.size() < CHILDS)add(data, s);
 
       //*s = new Node(data);
 
       return true;
     }
 
-    bool add(Object data, Node** &s)
+    bool add(Hyperrectangle data, Node** &s)
     {
-        (*s)->objects.push_back(data);
+        Hyperrectangle obj(data.getVertices());
+        (*s)->entries.push_back(make_pair(obj,(void *)&data));
     }
 
-    bool chooseLeaf(Object data, Node** &s)
+    bool chooseLeaf(Container data, Node** &s)
     {
         s = &this->head;
         double min;
@@ -57,11 +59,10 @@ public:
         while((*s)->level!=0){
             min = INF;
             use = 0;
-            for(int i=0;i<(*s)->objects.size();i++)
-                if((*s)->objects[i].contain(data) < min)
+            for(int i=0;i<(*s)->entries.size();i++)
+                if((*s)->entries[i].first.contain(data) < min)
                     use = i;
-
-            s = &(*s)->childs[use];
+            s = (Node **)(&(*s)->entries[use].second);;
         }
         return true;
     }
