@@ -37,33 +37,33 @@ public:
 
     bool insert(Hyperrectangle BoundingBox, Container data)
     {
-      Node ** s;
+      Node * s;
       this->chooseLeaf(BoundingBox, data, s);
 
-      if((*s)->entries.size() < CHILDS)add(BoundingBox, data, s);
+      if(s->entries.size() < CHILDS)add(BoundingBox, data, s);
 
       //*s = new Node(data);
 
       return true;
     }
 
-    bool add(Hyperrectangle BoundingBox, Container data, Node** &s)
+    bool add(Hyperrectangle BoundingBox, Container data, Node* &s)
     {
-        (*s)->entries.push_back(make_pair(BoundingBox,(void *)&data));
+        s->entries.push_back(make_pair(BoundingBox,(void *)&data));
     }
 
-    bool chooseLeaf(Hyperrectangle BoundingBox, Container data, Node** &s)
+    bool chooseLeaf(Hyperrectangle BoundingBox, Container data, Node* &s)
     {
-        s = &this->head;
+        s = this->head;
         double min;
         size_t use;
-        while((*s)->level!=0){
+        while(s->level!=0){
             min = INF;
             use = 0;
-            for(int i=0;i<(*s)->entries.size();i++)
-                if((*s)->entries[i].first.contain(BoundingBox) < min)
+            for(int i=0;i<s->entries.size();i++)
+                if(s->entries[i].first.contain(BoundingBox) < min)
                     use = i;
-            s = (Node **)(&(*s)->entries[use].second);;
+            s = static_cast<Node *>(s->entries[use].second);
         }
         return true;
     }
