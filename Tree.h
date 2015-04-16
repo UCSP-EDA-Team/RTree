@@ -67,6 +67,44 @@ public:
         }
         return true;
     }
+
+    bool Search(Hyperrectangle BoundingBox, Container data )
+    {
+
+        Node **s;
+        return find(BoundingBox,data,s);
+
+
+    }
+
+    bool find(Hyperrectangle BoundingBox, Container data, Node** &s )
+    {
+
+        if ((*s)->level == 0)
+        {
+            for(int i=0;i<(*s)->entries.size();i++)
+            {
+                if((*s)->entries[i].first.overlap(BoundingBox))
+                {
+                    return true;
+                }
+            }
+        }
+        s=&this->head;
+        for (int i=0;i<(*s)->entries.size();i++)
+        {
+            if((*s)->entries[i].first.overlap(BoundingBox))
+            {
+                s=(Node**) (& (*s)->entries[i].second);
+                find(BoundingBox,data,s);
+            }
+        }
+
+        return false;
+
+    }
+
+
     
 };
 
