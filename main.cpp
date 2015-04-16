@@ -7,6 +7,6 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    Tree<Hyperrectangle> x(2);
+
     return a.exec();
 }
