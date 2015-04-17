@@ -72,12 +72,13 @@ public:
     {
 
         Node **s;
+        s=&this->head;
         return find(BoundingBox,data,s);
 
 
     }
 
-    bool find(Hyperrectangle BoundingBox, Container data, Node** &s )
+    bool find(Hyperrectangle BoundingBox, Node** &s )
     {
 
         if ((*s)->level == 0)
@@ -90,7 +91,7 @@ public:
                 }
             }
         }
-        s=&this->head;
+
         for (int i=0;i<(*s)->entries.size();i++)
         {
             if((*s)->entries[i].first.overlap(BoundingBox))
