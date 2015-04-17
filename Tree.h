@@ -68,7 +68,7 @@ public:
         return true;
     }
 
-    bool Search(Hyperrectangle BoundingBox, Container data )
+    bool Search(Hyperrectangle BoundingBox)
     {
 
         Node **s;
