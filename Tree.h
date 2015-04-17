@@ -73,7 +73,7 @@ public:
 
         Node **s;
         s=&this->head;
-        return find(BoundingBox,data,s);
+        return find(BoundingBox,s);
 
 
     }
@@ -97,7 +97,7 @@ public:
             if((*s)->entries[i].first.overlap(BoundingBox))
             {
                 s=(Node**) (& (*s)->entries[i].second);
-                find(BoundingBox,data,s);
+                find(BoundingBox,s);
             }
         }
 
