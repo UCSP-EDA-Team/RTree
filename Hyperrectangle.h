@@ -39,6 +39,20 @@ public:
 
         return tmp;
     }
+
+    bool overlap(Hyperrectangle o)
+    {
+        points v =o.getVertices();
+
+        int i=0;
+        for (pair<double,double>dimension : this->vertices)
+        {
+            if(v[i].first>dimension.second || dimension.first>v[i].second) return false;
+            i++;
+        }
+        return true;
+    }
+
 };
 
 #endif // HYPERRECTANGLE_H
