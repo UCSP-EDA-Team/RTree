@@ -93,15 +93,52 @@ public:
     }
 
 
+    size_t IdxNode(Node * &parent, Node * &child)
+    {
+        for (size_t n_idx;n_idx<parent->entries.size();n_idx++)
+        {
+            if (parent->entries[n_idx].second == child)
+            {
+                return n_idx;
+            }
+        }
+    }
 
-    void AdjustTree(Node ** & l)
+    void AdjustTree(Node ** & l,Node ** & splitted)
     {
         Node ** n= &(*l);
         if ((*n) == this->head)
         {
             return;
         }
-        Node ** parent = &(n->parent);
+
+        Node ** parent = &((*n)->parent);
+        size_t n_idx=IdxNode(*parent,*n);
+        (*parent)->entries[n_idx].first=Adjust(*n);
+        if (splitted != NULL)
+        {
+            if ((*splitted)->entries.size()< 4 /* (4 es un numero que puse cualquiera pero debe ser: M-1)*/ )
+            {
+                typename Node::entry new_entry;
+                Node ** sp_parent =&((*splitted)->parent);
+                new_entry.second=(void*)(*splitted);
+                new_entry.first=(*sp_parent)->entries[idxNode(*sp_parent,*splitted)].first;
+                (*parent)->entries.push_back(new_entry);
+                return AdjustTree(parent,NULL);
+
+            }
+            else
+            {
+                /*Set {Parent, Parent’} = SplitNode (Parent, Splitted)
+                 *return AdjustTree(parent,Parent');
+                 */
+            }
+        }
+        else
+        {
+            return AdjustTree(parent, NULL);
+        }
+
 
     }
 
