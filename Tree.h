@@ -8,6 +8,8 @@ template<typename Container>
 class Tree
 {
 private:
+    typedef pair<Hyperrectangle, void *> entry;
+    typedef vector<entry> aentry;
     class Node
     {
         friend class Tree;
@@ -15,8 +17,8 @@ private:
         Node * parent;
         size_t level;
 
-        typedef pair<Hyperrectangle, void *> entry;
-        vector<entry> entries;
+
+        aentry entries;
     public:
         Node(Node *parent, size_t level)
         {
@@ -68,6 +70,7 @@ public:
         return true;
     }
 
+<<<<<<< Updated upstream
     Hyperrectangle Adjust(Node * & s)
     {
         points mbr_points=s->entries[0].first.vertices;
@@ -180,6 +183,31 @@ public:
     }
 
 
+=======
+    bool split(Node * &l, Node *&ll, aentry g)
+    {
+
+    }
+
+    void pickSeeds(aentry block, int &e1, int &e2 )
+    {
+        double d = INF;
+        double tmp;
+        for(int i=0;i<block.size();i++)
+        {
+            for(int j=i;j<block.size();i++)
+            {
+                tmp = block[i].first.contain(block[j].first) - block[i].first.area() - block[j].first.area() ;
+                if(d > (tmp))
+                {
+                    e1 = i;
+                    e2 = j;
+                    d = tmp;
+                }
+            }
+        }
+    }
+>>>>>>> Stashed changes
     
 };
 
