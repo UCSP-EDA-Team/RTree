@@ -23,6 +23,9 @@ int main(int argc, char *argv[])
 
     t.insert(p,1);
     cout << "listo" << endl;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
     return a.exec();

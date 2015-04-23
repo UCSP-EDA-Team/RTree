@@ -71,6 +71,7 @@ public:
     }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     Hyperrectangle Adjust(Node * & s)
     {
         points mbr_points=s->entries[0].first.vertices;
@@ -184,6 +185,8 @@ public:
 
 
 =======
+=======
+>>>>>>> Stashed changes
     bool split(Node * &l, Node *&ll, aentry g)
     {
 
@@ -207,6 +210,9 @@ public:
             }
         }
     }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     
 };
