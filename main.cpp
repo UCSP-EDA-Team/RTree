@@ -6,8 +6,6 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-<<<<<<< Updated upstream
-=======
     
     double e1, e2;
     std::cin >> e1 >> e2;
@@ -23,10 +21,6 @@ int main(int argc, char *argv[])
 
     t.insert(p,1);
     cout << "listo" << endl;
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
     return a.exec();
 }
