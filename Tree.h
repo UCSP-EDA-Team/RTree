@@ -68,6 +68,43 @@ public:
         return true;
     }
 
+    Hyperrectangle Adjust(Node * & s)
+    {
+        points mbr_points=s->entries[0].first.vertices;
+
+        mbr_points[0].first;
+
+        for (std::vector< pair<Hyperrectangle, void *> >::iterator i = ++(s->entries.begin()); i != s->entries.end(); ++i)
+        {
+            for (size_t j=0;j<nDimensions;j++ )
+            {
+                if((mbr_points[j].first)>((*i).first.vertices[j].first))
+                {
+                    mbr_points[j].first=(*i).first.vertices[j].first;
+                }
+                if((mbr_points[j].second)<((*i).first.vertices[j].second))
+                {
+                    mbr_points[j].second=(*i).first.vertices[j].second;
+                }
+            }
+
+        }
+        return Hyperrectangle(mbr_points);
+    }
+
+
+
+    void AdjustTree(Node ** & l)
+    {
+        Node ** n= &(*l);
+        if ((*n) == this->head)
+        {
+            return;
+        }
+        Node ** parent = &(n->parent);
+
+    }
+
     bool Search(Hyperrectangle BoundingBox)
     {
 
