@@ -8,6 +8,8 @@ template<typename Container>
 class Tree
 {
 private:
+    typedef pair<Hyperrectangle, void *> entry;
+    typedef vector<entry> aentry;
     class Node
     {
         friend class Tree;
@@ -15,8 +17,8 @@ private:
         Node * parent;
         size_t level;
 
-        typedef pair<Hyperrectangle, void *> entry;
-        vector<entry> entries;
+
+        aentry entries;
     public:
         Node(Node *parent, size_t level)
         {
@@ -37,33 +39,33 @@ public:
 
     bool insert(Hyperrectangle BoundingBox, Container data)
     {
-      Node ** s;
+      Node * s;
       this->chooseLeaf(BoundingBox, data, s);
 
-      if((*s)->entries.size() < CHILDS)add(BoundingBox, data, s);
+      if(s->entries.size() < CHILDS)add(BoundingBox, data, s);
 
       //*s = new Node(data);
 
       return true;
     }
 
-    bool add(Hyperrectangle BoundingBox, Container data, Node** &s)
+    bool add(Hyperrectangle BoundingBox, Container data, Node* &s)
     {
-        (*s)->entries.push_back(make_pair(BoundingBox,(void *)&data));
+        s->entries.push_back(make_pair(BoundingBox,(void *)&data));
     }
 
-    bool chooseLeaf(Hyperrectangle BoundingBox, Container data, Node** &s)
+    bool chooseLeaf(Hyperrectangle BoundingBox, Container data, Node* &s)
     {
-        s = &this->head;
+        s = this->head;
         double min;
         size_t use;
-        while((*s)->level!=0){
+        while(s->level!=0){
             min = INF;
             use = 0;
-            for(int i=0;i<(*s)->entries.size();i++)
-                if((*s)->entries[i].first.contain(BoundingBox) < min)
+            for(int i=0;i<s->entries.size();i++)
+                if(s->entries[i].first.contain(BoundingBox) < min)
                     use = i;
-            s = (Node **)(&(*s)->entries[use].second);;
+            s = static_cast<Node *>(s->entries[use].second);
         }
         return true;
     }
@@ -179,7 +181,87 @@ public:
 
     }
 
+    bool split(Node *l, Node *ll, entry g)
+    {
+        aentry group;
 
+        for(int i=0;i<l->entries.size();i++)
+        {
+            group.push_back(l->entries[i]);
+        }
+        group.push_back(g);
+
+        l->entries.clear();
+
+        int e1, e2;
+        pickSeeds(group, e1, e2);
+
+        l->entries.push_back(group[e1]);
+        ll->entries.push_back(group[e2]);
+        Hyperrectangle h1(group[e1].first.getVertices()), h2(group[e1].first.getVertices());
+
+        group.erase(group.begin() + e1);
+        group.erase(group.begin() + e2);
+
+        int e, ng;
+        while(group.size())
+        {
+            pickNext(group, h1, h2, e);
+            if(ng < 1)
+            {
+                l->entries.push_back(group[e]);
+                h1.contain(group[e].first);
+            }else{
+                ll->entries.push_back(group[e]);
+                h2.contain(group[e].first);
+            }
+            group.erase(group.begin() + e);
+        }
+    }
+
+    void pickSeeds(aentry block, int &e1, int &e2 )
+    {
+        double d = 0;
+        double tmp;
+        for(int i=0;i<block.size();i++)
+        {
+            for(int j=i;j<block.size();i++)
+            {
+                tmp = abs(block[i].first.contain(block[j].first) - block[i].first.area() - block[j].first.area()) ;
+                if(d < (tmp))
+                {
+                    e1 = i;
+                    e2 = j;
+                    d = tmp;
+                }
+            }
+        }
+    }
+
+    void pickNext(aentry noGroup, Hyperrectangle * g1, Hyperrectangle * g2, int &e, int&ng)
+    {
+        double m = 0;
+        double d1;
+        double d2;
+
+        for(int i=0;i<noGroup.size();i++)
+        {
+            d1 = noGroup[i].first.contain(*g1);
+            d2 = noGroup[i].first.contain(*g2);
+
+            if(m > abs(d1 - d2))
+            {
+                m = abs(d1 - d2);
+                e = i;
+                if(d1 > d2)
+                {
+                    ng = 0;
+                }else{
+                    ng = 1;
+                }
+            }
+        }
+    }
     
 };
 
