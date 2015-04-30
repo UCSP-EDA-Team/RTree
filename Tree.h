@@ -16,8 +16,6 @@ private:
     private:
         Node * parent;
         size_t level;
-
-
         aentry entries;
     public:
         Node(Node *parent, size_t level)
@@ -262,7 +260,97 @@ public:
             }
         }
     }
+
+     Node* FindLeaf(entry a,Node * n )
+     {
+        if (n->level == 0 )
+        {
+            size_t idx_n= IdxNode(n->parent,n);
+            if(n->parent->entries[idx_n].first.contain(a.first))
+                return n;
+            return NULL;
+        }
+        else
+        {
+            for(vector<entry>::iterator i = n->entries.begin();i!=n->entries.end();i++)
+            {
+
+                if ((*i).first.overlap(a.first))
+                {
+                    Node * l= FindLeaf(a,(*i).second);
+                    if (l != NULL)
+                    {
+                            return l;
+                    }
+                }
+            }
+
+        }
+
+     }
+
+     void CondenseTree(Node * &n, vector<Node*>& qs)
+     {
+
+         if (n!= this->head)
+         {
+             Node* parent= n->parent;
+             size_t idx_p=IdxNode(n->parent,n);
+             entry* e_parent = &(n->parent->entries[idx_p].first);
+             if (n->entries.size()< 2 /* 2 es solo un número, hay que especificar un m y un M en el arbol*/)
+             {
+                 delete e_parent;
+                 qs.push_back(n);
+             }
+             else
+             {
+                 n->parent->entries[idx_p].first= Adjust(n);
+             }
+             CondenseTree(parent,qs);
+         }
+         else if ((n == this->head) && (qs.size!=0))
+         {
+             for (typename vector<Node*>::iterator i= qs.begin();i!=qs.end();i++)
+             {
+                    for(vector<entry>::iterator j=(*i).entries.begin(); j!=(*i).entries.end();j++ )
+                    {
+                        if ((*i).level==0)
+                        {
+                            insert((*j).first,(Container)((*j).second));
+                        }
+                    }
+             }
+         }
+
+
+     }
+
+     bool Delete(entry &e)
+     {
+         Node **p = &(this->head);
+         return Del(e,p);
+
+     }
+
+     bool Del(entry &e, Node** p)
+     {
+
+         Node * l = FindLeaf(e,*p);
+         delete &e;
+         vector<Node*> qs;
+         CondenseTree(l,qs);
+         if(this->head->entries.size()==1)
+         {
+             head=&(this->head->entries[0].second);
+         }
+     }
+
+
+
     
 };
+
+
+
 
 #endif // TREE_H
