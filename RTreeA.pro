@@ -15,10 +15,12 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
+LIBS += -lzmq
 
 SOURCES += main.cpp
 
 HEADERS += \
     Tree.h \
     config.h \
-    Hyperrectangle.h
+    Hyperrectangle.h \
+    Connector.h
